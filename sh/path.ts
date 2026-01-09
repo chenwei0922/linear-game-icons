@@ -19,3 +19,6 @@ export const pathReactSrc = resolve(pathReact, 'src')
 export const pathReactDist = resolve(pathReact, 'dist')
 export const pathReactComponents = resolve(pathReactSrc, 'components')
 
+export const pathExampleReact = resolve(pathExample, 'react-next-demo')
+export const pathExampleDist = resolve(pathExample, 'dist')
+

@@ -6,8 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:react": "pnpm run -C packages/react build",
+    "publish:react": "pnpm run -C packages/react publish",
     "preview:react": "pnpm run -C example/react-next-demo dev",
-    "publish:react": "pnpm run -C packages/react publish"
+    "deploy": "tsx sh/deploy.ts"
   },
   "keywords": [],
   "author": "",

@@ -1,0 +1,119 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm install
+      - run: npm run test:ci
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: unit-test-results
+          path: |
+            test-results/
+            coverage/
+
+  e2e-test:
+    runs-on: ubuntu-latest
+    needs: unit-test  # 依赖 unit-test job
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          # run_install: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          # cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        # 关键部分：在这里注入环境变量
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+        run: pnpm run build
+        
+      # - run: npm install
+      # - run: npm run build
+
+          
+      # - uses: actions/checkout@v4
+      # - run: npm install
+
+      # serve 会自动在端口 3000 启动一个静态服务器来服务 out 目录。
+      # - run: npx serve@latest out &
+      # - run: npx wait-on http://localhost:3000
+      # - run: npm run cypress:run
+
+      - name: Run E2E Tests 
+        run: pnpm run test:e2e:prod
+        env:
+          GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+
+      # &关键符号，表示后台运行这个命令，不会阻塞进程，可继续执行后续命令
+      # - run: pnpm run start &
+      # # 等待某个资源变(如URL、端口、文件)为可用状态
+      # - run: npx wait-on http://localhost:3000
+      # - run: pnpm run cypress:run
+
+      - name: Upload Cypress results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cypress-results
+          path: |
+            cypress/videos/
+            cypress/screenshots/
+      
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    
+    - name: Install pnpm
+      uses: pnpm/action-setup@v4
+      with:
+        version: 9
+
+    - name: Set up Node
+      uses: actions/setup-node@v4
+      with:
+        node-version: 23.4.0
+    
+    - name: Install dependencies
+      run: pnpm install --frozen-lockfile
+      
+    - name: Build Modules
+      run: pnpm run build:react
+
+    - name: Build Example
+      run: pnpm run deploy
+    
+    - name: Deploy Example
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        publish_dir: './example/dist'
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        user_name: ${{ secrets.MY_USER_NAME }}
+        user_email: ${{ secrets.MY_USER_EMAIL }}
+        commit_message: auto deploy example
