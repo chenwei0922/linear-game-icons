@@ -1,0 +1,55 @@
+name: 🎨 Sync Icons
+
+on:
+  workflow_dispatch: # 允许手动点击按钮触发
+  schedule:
+    - cron: '0 1 * * *' # 每天凌晨 1 点自动运行 (UTC 时间，北京时间早上9点)
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # 必须赋予写入权限，否则无法提交代码
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # 使用 Personal Access Token (PAT) 可以触发后续的 workflow (如自动发布 npm)
+          # 如果不需要触发后续流程，直接用默认 token 即可
+          token: ${{ secrets.GITHUB_TOKEN }} 
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run Sync Script
+        env:
+          # 这些 Secrets 需要在 GitHub 仓库的 Settings -> Secrets and variables -> Actions 中设置
+          FIGMA_TOKEN: ${{ secrets.FIGMA_TOKEN }}
+          FIGMA_FILE_KEY: ${{ secrets.FIGMA_FILE_KEY }}
+        run: node scripts/sync-icons.js
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --exit-code || echo "changes=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and Push
+        if: steps.git-check.outputs.changes == 'true'
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add packages/react-icon/src/svgs
+          git commit -m "chore(icons): auto sync from figma [skip ci]"
+          git push
