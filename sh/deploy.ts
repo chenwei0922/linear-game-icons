@@ -17,7 +17,7 @@ async function buildExample(input: string, output: string, _flag?: string) {
   await emptyDir(srcdist)
   await emptyDir(outDist)
 
-  await run('pnpm install', input)
+  await run('pnpm install --no-frozen-lockfile', input)
   await run('pnpm run build', input)
   await copy(srcdist, outDist)
 }
