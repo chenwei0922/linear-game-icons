@@ -1,0 +1,58 @@
+{
+  "name": "@lineargame/react-icon",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "pnpm run build:generate && pnpm run build:build && pnpm run build:types",
+    "build:generate": "tsx build/generate.ts",
+    "build:build": "NODE_ENV=production tsx build/build.ts",
+    "build:types": "tsc --declaration --emitDeclarationOnly --outDir dist/types",
+    "publish": "npm publish"
+  },
+  "keywords": [
+    "svg",
+    "icon",
+    "react"
+  ],
+  "author": "ChenWei",
+  "license": "ISC",
+  "publishConfig": {
+    "access": "public"
+  },
+  "homepage": "https://github.com/chenwei0922/chen-svg-icon.git#README",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/chenwei0922/chen-svg-icon.git",
+    "directory": "packages/react"
+  },
+  "bugs": {
+    "url": "https://github.com/chenwei0922/chen-svg-icon/issues"
+  },
+  "files": [
+    "dist"
+  ],
+  "types": "dist/types/index.d.ts",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    },
+    "./*": "./*"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./*",
+        "./dist/types/*"
+      ]
+    }
+  },
+  "sideEffects": false,
+  "unpkg": "dist/index.iife.min.js",
+  "jsdelivr": "dist/index.iife.min.js",
+  "devDependencies": {}
+}

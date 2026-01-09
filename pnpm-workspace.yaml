@@ -1,0 +1,12 @@
+packages:
+  # 直接子目录 all packages in direct subdirs of packages/  
+  # - 'packages/*'
+  # all packages in subdirs of packages/
+  - 'packages/*'
+  - 'example/*'
+  # exclude packages that are inside test directories
+  # - '!**/test/**'
+
+ignoredBuiltDependencies:
+  - sharp
+  - unrs-resolver

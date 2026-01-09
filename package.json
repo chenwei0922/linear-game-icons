@@ -1,0 +1,38 @@
+{
+  "name": "yoroll-icon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:react": "pnpm run -C packages/react build",
+    "preview:react": "pnpm run -C example/react-next-demo dev",
+    "publish:react": "pnpm run -C packages/react publish"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.27.0",
+  "devDependencies": {
+    "@pnpm/find-workspace-dir": "^1000.1.3",
+    "@pnpm/find-workspace-packages": "^6.0.9",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^25.0.3",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@types/tinycolor2": "^1.4.6",
+    "camelcase": "^9.0.0",
+    "chalk": "^5.6.2",
+    "consola": "^3.4.2",
+    "esbuild": "^0.27.2",
+    "fast-glob": "^3.3.3",
+    "fs-extra": "^11.3.3",
+    "prettier": "^3.7.4",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "svgo": "^4.0.0",
+    "tinycolor2": "^1.6.0",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  }
+}
