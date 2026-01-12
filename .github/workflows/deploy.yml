@@ -39,16 +39,22 @@ jobs:
         with:
           version: 9
 
-      # 3. 恢复缓存 (加快构建速度)
+      # 3. 恢复缓存 (适配 Monorepo 子目录)
       - name: Restore cache
         uses: actions/cache@v4
         with:
+          # ✅ 关键修改 1: 指向子目录下的 .next/cache
           path: |
-            .next/cache
-          # 这里假设你的 next app 在根目录，如果在 monorepo 子目录，key 需要调整
-          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**.[jt]s', '**.[jt]sx') }}
+            example/react-next-demo/.next/cache
+          
+          # ✅ 关键修改 2 (推荐): 
+          # hashFiles('**/pnpm-lock.yaml') 扫描全局依赖锁定文件，没问题
+          # 后面的 hashFiles 建议限定在子目录下，这样只有改这个 Demo 的代码才会触发缓存更新
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('example/react-next-demo/**/*.{js,jsx,ts,tsx}') }}
+          
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/pnpm-lock.yaml') }}-
+
 
       # 4. 安装依赖
       - name: Install dependencies
