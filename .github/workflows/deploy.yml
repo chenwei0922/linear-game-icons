@@ -1,5 +1,5 @@
 # .github/workflows/deploy.yml
-name: Deploy Next.js to GitHub Pages
+name: 📚 Deploy Next.js to GitHub Pages
 
 on:
   # 当推送到 main 分支时触发
