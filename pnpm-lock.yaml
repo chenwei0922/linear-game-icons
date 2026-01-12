@@ -75,11 +75,9 @@ importers:
         specifier: ^5.9.3
         version: 5.9.3
 
-  example/dist: {}
-
   example/react-next-demo:
     dependencies:
-      '@lineargame/react-icon':
+      '@yoroll/react-icon':
         specifier: workspace:*
         version: link:../../packages/react
       next:

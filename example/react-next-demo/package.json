@@ -12,7 +12,7 @@
     "next": "16.1.1",
     "react": "19.2.3",
     "react-dom": "19.2.3",
-    "@lineargame/react-icon": "workspace:*"
+    "@yoroll/react-icon": "workspace:*"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
