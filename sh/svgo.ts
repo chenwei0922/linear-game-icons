@@ -40,7 +40,7 @@ const getSvgoConfig = (lang: 'react' | 'vue' = 'react') => {
           //📢:约定#fefefe为fill填充色, #333为stroke颜色(设计师)
           const colorRelations = {
             'black': '_fillColor',
-            '#333': '_strokeColor'
+            'white': '_strokeColor'
           }
           const deal = (children: XastChild[]) => {
             children.map((n) => {

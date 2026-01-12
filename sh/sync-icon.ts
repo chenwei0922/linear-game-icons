@@ -37,7 +37,7 @@ const getFileData = async () => {
   // 缓存文件的路径
   const CACHE_PATH = path.resolve(process.cwd(), 'figma-cache.json');
   // 设置缓存过期时间 (例如 1 小时)，开发时可以设长一点
-  const CACHE_DURATION = 4 * 60 * 60 * 1000;
+  const CACHE_DURATION = 8 * 60 * 60 * 1000;
   // === 1. 智能获取文件结构 (带缓存) ===
   let useCache = false;
 

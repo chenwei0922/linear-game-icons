@@ -126,7 +126,7 @@ async function generateEntry(files: string[]) {
   const content = files
     .map((file) => {
       const { upperName } = getName(file)
-      return `export {default as ${upperName}} from './${upperName}'`
+      return `export {default as Icon${upperName}} from './${upperName}'`
     })
     .join('\n')
 

@@ -1,16 +1,14 @@
 'use client';
 
 import * as SvgComs from '@lineargame/react-icon'
-import { CreditFilled } from '@lineargame/react-icon';
 import { useState } from 'react'
-
 
 export default function Home() {
   const [color, setColor] = useState('white')
 
   const onClick = (C: any) => {
     //复制
-    navigator.clipboard.writeText(`<${C.name} size={30} color={'red'} />`)
+    navigator.clipboard.writeText(`<Icon${C.name} size={30} color={'red'} />`)
     alert('已复制')
   }
   return (
@@ -22,12 +20,12 @@ export default function Home() {
         <div className="w-8 h-8 bg-[blue]" onClick={() => setColor('blue')} />
       </div>
       <div className="w-auto flex flex-row flex-wrap">
-        {/* <CreditFilled size={30} color={'red'} /> */}
+        {/* <IconCreditFilled size={30} color={'red'} /> */}
         {Object.values(SvgComs).map((C, i) => {
           return (
-            <div onClick={() => onClick(C)} key={i} className="cursor-pointer flex flex-col items-center justify-center w-20 h-20 border-[1px] border-white/20">
-              {C && <C size={30} color={color} />}
-              <span className="text-white text-xs mt-2">{C.name}</span>
+            <div onClick={() => onClick(C)} key={i} className="px-2 cursor-pointer flex flex-col items-center justify-center w-25 p-3 border-[1px] border-white/20">
+              <div className='w-full h-10 flex items-center justify-center'>{C && <C size={30} color={color} />}</div>
+              <div className='w-full mt-3 h-10 flex  justify-center'><span className="text-white text-sm text-center break-all">Icon{C.name}</span></div>
             </div>
           )
         })}

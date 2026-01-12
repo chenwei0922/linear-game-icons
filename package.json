@@ -1,5 +1,5 @@
 {
-  "name": "yoroll-icon",
+  "name": "linear-game-icons",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:react": "pnpm run -C packages/react build",
     "publish:react": "pnpm run -C packages/react publish",
-    "preview:react": "pnpm run -C example/react-next-demo dev",
+    "preview:react": "pnpm install && pnpm run -C example/react-next-demo dev",
     "deploy": "tsx sh/deploy.ts",
     "sync-icon": "tsx sh/sync-icon.ts"
   },

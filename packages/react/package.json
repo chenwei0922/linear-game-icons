@@ -1,6 +1,6 @@
 {
   "name": "@lineargame/react-icon",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -20,14 +20,14 @@
   "publishConfig": {
     "access": "public"
   },
-  "homepage": "https://github.com/chenwei0922/chen-svg-icon.git#README",
+  "homepage": "https://github.com/chenwei0922/linear-game-icons.git#README",
   "repository": {
     "type": "git",
-    "url": "https://github.com/chenwei0922/chen-svg-icon.git",
+    "url": "https://github.com/chenwei0922/linear-game-icons.git",
     "directory": "packages/react"
   },
   "bugs": {
-    "url": "https://github.com/chenwei0922/chen-svg-icon/issues"
+    "url": "https://github.com/chenwei0922/linear-game-icons/issues"
   },
   "files": [
     "dist"
