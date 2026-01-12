@@ -109,12 +109,12 @@ async function transformToReactComponent(file: string) {
   const code = `
     import React from 'react'
     import { IconProps } from '.'
-    const ${upperName} = ({ size, width, height, color, className, fill, stroke }:IconProps) => {
+    const Icon${upperName} = ({ size, width, height, color, className, fill, stroke }:IconProps) => {
       return (
         ${newContent}
       )
     }
-    export default ${upperName}
+    export default Icon${upperName}
   `
   const code1 = replaceCodePlaceholderAttrs(code)
   const forCode = await formatCode(code1, 'babel-ts')
