@@ -59,6 +59,8 @@ jobs:
       # 4. 安装依赖
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      
+      - run: pnpm install -C example/react-next-demo
 
       # 5. 构建项目
       # ⚠️ 如果你的项目在子目录 (如 example/react-next-demo)，请修改下面的命令
