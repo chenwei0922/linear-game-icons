@@ -18,6 +18,10 @@ const getSvgoConfig = (lang: 'react' | 'vue' = 'react') => {
       'removeUselessStrokeAndFill',
       //排序属性
       'sortAttrs',
+      //将 style 转换为 attrs
+      'convertStyleToAttrs',
+      //// 移除默认的 width/height，完全依赖 viewBox 和我们注入的 props
+      'removeDimensions',
       //添加svg节点属性配置
       {
         name: 'addAttributesToSVGElement',
@@ -39,16 +43,33 @@ const getSvgoConfig = (lang: 'react' | 'vue' = 'react') => {
         fn: (root: XastRoot, params: any, info: PluginInfo) => {
           //📢:约定#fefefe为fill填充色, #333为stroke颜色(设计师)
           const colorRelations = {
+            // 填充色，对应fill
             'black': '_fillColor',
-            'white': '_strokeColor'
+            '#000000': '_fillColor',
+            '#000': '_fillColor',
+
+            // 线条色，对应stroke
+            'white': '_strokeColor',
+            '#ffffff': '_strokeColor',
+            '#fff': '_strokeColor'
           }
           const deal = (children: XastChild[]) => {
             children.map((n) => {
               const node = n as XastElement
+              if (!node.attributes) return;
               // console.log(node.attributes)
               for (const [name, value] of Object.entries(node.attributes)) {
                 // 处理颜色 key 值, 如果 color, fill, stroke属性值为以上颜色值，则用占位符替换，否则不做变动
                 if (['color', 'fill', 'stroke'].includes(name)) {
+                  // 🛑 规则 1: 绝对不碰 url() 引用 (渐变、遮罩、滤镜)
+                  if (value.includes('url(')) {
+                    continue;
+                  }
+                  // 🛑 规则 2: 不碰 "none"
+                  if (value === 'none') {
+                    continue;
+                  }
+                  // 🎯 规则 3: 精确匹配颜色
                   for (const [color, _placeColorName] of Object.entries(colorRelations)) {
                     // 颜色一致
                     if (tinycolor.equals(value, color)) {
@@ -78,17 +99,26 @@ const getSvgoConfig = (lang: 'react' | 'vue' = 'react') => {
           const deal = (children: XastChild[]) => {
             children.map((n) => {
               const node = n as XastElement
+              if (!node.attributes) return;
+
               for (const [name, value] of Object.entries(node.attributes)) {
                 // console.log(node.attributes)
                 if (Object.keys(attrRelations).includes(name)) {
+                  // 🔥 核心修复逻辑在这里 🔥
+                  // 如果当前属性是 width 或 height，必须检查当前节点是不是 'svg' 根标签
+                  // 如果是内部元素（如 rect, g, mask），绝对不要修改它们的尺寸，保持原样！
+                  if ((name === 'width' || name === 'height') && node.name !== 'svg') {
+                    continue;
+                  }
+                  // 如果已经包含占位符（说明被前面的插件处理过了），跳过
                   if (value.includes(attrRelations[name])) {
-                    //新增的属性
+                    continue;
+                  }
+
+                  if (name === 'class') {
+                    node.attributes[name] = `'${value} ' + ${attrRelations[name]} `
                   } else {
-                    if (name === 'class') {
-                      node.attributes[name] = `'${value} ' + ${attrRelations[name]} `
-                    } else {
-                      node.attributes[name] = `${attrRelations[name]} || ${value}`
-                    }
+                    node.attributes[name] = `${attrRelations[name]} || ${value}`
                   }
                 }
               }
@@ -102,6 +132,64 @@ const getSvgoConfig = (lang: 'react' | 'vue' = 'react') => {
     ]
   }
   if (lang === 'react') {
+    svgoConfig.plugins?.push({
+      name: 'fixStyleAndCamelCase',
+      fn: (root: XastRoot) => {
+        const visit = (node: XastElement) => {
+          // 1. 处理残留的 style 属性 (专门解决 mask-type 报错)
+          if (node.attributes && node.attributes.style) {
+            const styleStr = node.attributes.style;
+            // 分割样式字符串 "mask-type:luminance; color:red"
+            const styles = styleStr.split(';');
+
+            styles.forEach((s) => {
+              const [key, val] = s.split(':');
+              if (key && val) {
+                // key: "mask-type" -> camelKey: "maskType"
+                const camelKey = camelcase(key.trim());
+                // 把它提出来变成属性
+                node.attributes[camelKey] = val.trim();
+              }
+            });
+            // 💀 核心步骤：彻底删除 style 属性，消除 TS 报错
+            delete node.attributes.style;
+          }
+
+          // 2. 处理原本就是属性但带横杠的 key (如 stroke-width -> strokeWidth)
+          // 必须放在处理 style 之后，因为 style 里的属性提出来可能也带横杠
+          if (node.attributes) {
+            for (const [name, value] of Object.entries(node.attributes)) {
+              if (name.includes('-')) {
+                const camelKey = camelcase(name);
+                // 只有当新名字和旧名字不一样时才替换，防止无限循环
+                if (camelKey !== name) {
+                  node.attributes[camelKey] = value;
+                  delete node.attributes[name];
+                }
+              }
+            }
+          }
+
+          // 递归处理子节点
+          if (node.children) {
+            node.children.forEach((child) => {
+              if (child.type === 'element') {
+                visit(child);
+              }
+            });
+          }
+        };
+
+        if (root.children) {
+          root.children.forEach((child) => {
+            if (child.type === 'element') {
+              visit(child);
+            }
+          });
+        }
+        return null;
+      }
+    })
     svgoConfig.plugins?.push({
       name: 'covertAttrsCamelCase',
       fn: (root: XastRoot, params: any, info: PluginInfo) => {
