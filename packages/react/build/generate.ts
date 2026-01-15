@@ -109,7 +109,7 @@ async function transformToReactComponent(file: string) {
   const code = `
     import React from 'react'
     import { IconProps } from '.'
-    const Icon${upperName} = ({ size, width, height, color, className, fill, stroke }:IconProps) => {
+    const Icon${upperName}: React.FC<IconProps> = ({ size, width, height, color, className, fill, stroke }) => {
       return (
         ${newContent}
       )

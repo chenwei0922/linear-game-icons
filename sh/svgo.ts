@@ -73,7 +73,7 @@ const getSvgoConfig = (lang: 'react' | 'vue' = 'react') => {
                   for (const [color, _placeColorName] of Object.entries(colorRelations)) {
                     // 颜色一致
                     if (tinycolor.equals(value, color)) {
-                      node.attributes[name] = `${_placeColorName} || '${value}'`
+                      node.attributes[name] = `${_placeColorName} || 'currentColor' || '${value}'`
                     }
                   }
                 }

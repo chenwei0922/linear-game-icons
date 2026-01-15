@@ -44,3 +44,4 @@ dist
 **/*/src/components/*
 
 *.backup
+.npmrc

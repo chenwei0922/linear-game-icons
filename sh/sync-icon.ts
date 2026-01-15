@@ -76,10 +76,6 @@ async function main() {
       throw new Error(`找不到名为 "${ICON_PAGE_NAME}" 的 Page，请检查 Figma 文件`);
     }
 
-    console.log('////', canvas.children)
-    console.log('||||||', canvas.children?.[0])
-
-
     // 如果是 Variants (COMPONENT_SET)，需要进一步提取里面的子组件，这里简化处理，只取 COMPONENT
     // 实际项目中建议图标不要做成复杂 Variants，每个图标一个 Component 最好
     const targetNodes: { id: string; name: string; type: string; children: any; }[] = [];
