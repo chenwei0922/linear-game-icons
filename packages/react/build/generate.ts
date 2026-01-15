@@ -51,7 +51,7 @@ const getSvgFiles = async () => {
  * 获取后续所需的格式组件名从文件地址中
  */
 const getName = (file: string) => {
-  const filename = path.basename(file).replace('.svg', '')
+  const filename = path.basename(file).replace('.svg', '').replace(/:/g, '')
   return {
     //原始文件名
     filename,

@@ -2,7 +2,6 @@
 
 import * as SvgComs from '@yoroll/react-icon'
 import { useState } from 'react'
-import { IconAdd } from '@yoroll/react-icon'
 // console.log(Object.entries(SvgComs))
 
 export default function Home() {

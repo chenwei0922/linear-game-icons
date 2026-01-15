@@ -2,7 +2,7 @@ import path from "path";
 import { pathSvg } from "./path";
 import chalk from "chalk";
 import axios from "axios";
-import { emptyDir, ensureDir, existsSync, readJson, statSync, writeFile, writeJSON } from "fs-extra";
+import { emptyDir, ensureDir, existsSync, readdir, readJson, remove, statSync, writeFile, writeJSON } from "fs-extra";
 import dotenv from "dotenv";
 dotenv.config()
 
@@ -79,8 +79,8 @@ async function main() {
     // 如果是 Variants (COMPONENT_SET)，需要进一步提取里面的子组件，这里简化处理，只取 COMPONENT
     // 实际项目中建议图标不要做成复杂 Variants，每个图标一个 Component 最好
     const targetNodes: { id: string; name: string; type: string; children: any; }[] = [];
-    const traverse = (nodes: { type: string; children: any; }[]) => {
-      nodes.forEach((node: { type: string; children: any; }) => {
+    const traverse = (nodes: any[]) => {
+      nodes.forEach((node: any) => {
         //1. 命中目标：如果是组件，收集起来,同时匹配 COMPONENT (母版) 和 INSTANCE (实例)
         if (node.type === 'COMPONENT' || node.type === 'INSTANCE' || node.type === 'FRAME') {
           targetNodes.push(node)
@@ -117,7 +117,14 @@ async function main() {
 
     // 5. 准备目录
     await ensureDir(OUTPUT_DIR);
-    await emptyDir(OUTPUT_DIR); // 可选：先清空目录，防止残留已删除的图标
+
+    // 清理旧的 SVG 文件，但保留其他文件（如 package.json）
+    const existingFiles = await readdir(OUTPUT_DIR);
+    for (const file of existingFiles) {
+      if (file.endsWith('.svg')) {
+        await remove(path.join(OUTPUT_DIR, file));
+      }
+    }
 
     // 6. 下载并处理
     for (const node of targetNodes) {
