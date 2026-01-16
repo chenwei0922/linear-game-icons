@@ -45,3 +45,6 @@ dist
 
 *.backup
 .npmrc
+
+# Figma API cache (should not be committed)
+figma-cache.json

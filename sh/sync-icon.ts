@@ -49,7 +49,7 @@ const getFileData = async () => {
       useCache = true;
     }
   }
-  useCache = false //远端的话，每次都要请求，不使用缓存了，因为远端一天一执行
+  // useCache = false //远端的话，每次都要请求，不使用缓存了，因为远端一天一执行
   if (useCache) {
     console.log(chalk.yellow('📦 命中本地缓存 (figma-cache.json)，跳过 API 请求...'));
     fileData = await readJson(CACHE_PATH); // 读取本地文件
