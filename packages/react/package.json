@@ -1,6 +1,6 @@
 {
   "name": "@yoroll/react-icon",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -8,7 +8,7 @@
     "build:generate": "tsx build/generate.ts",
     "build:build": "NODE_ENV=production tsx build/build.ts",
     "build:types": "tsc --declaration --emitDeclarationOnly --outDir dist/types",
-    "publish": "npm publish"
+    "release": "npm publish"
   },
   "keywords": [
     "svg",

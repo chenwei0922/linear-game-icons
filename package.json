@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:react": "pnpm run -C packages/react build",
-    "publish:react": "pnpm run -C packages/react publish",
+    "publish:react": "pnpm run -C packages/react release",
     "preview:react": "pnpm install && pnpm run -C example/react-next-demo dev",
     "sync-icon": "tsx sh/sync-icon.ts"
   },

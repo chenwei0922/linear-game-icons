@@ -136,23 +136,37 @@ const getSvgoConfig = (lang: 'react' | 'vue' = 'react') => {
       name: 'fixStyleAndCamelCase',
       fn: (root: XastRoot) => {
         const visit = (node: XastElement) => {
-          // 1. 处理残留的 style 属性 (专门解决 mask-type 报错)
+          // 1. 处理残留的 style 属性 (专门解决 mask-type 报错) style="mask-type:luminance"
           if (node.attributes && node.attributes.style) {
             const styleStr = node.attributes.style;
             // 分割样式字符串 "mask-type:luminance; color:red"
-            const styles = styleStr.split(';');
+            const styles = styleStr.split(';').map(s => s.trim()).filter(s => s);
+
+            // 用于存储保留的样式
+            const remainingStyles: string[] = [];
 
             styles.forEach((s) => {
-              const [key, val] = s.split(':');
-              if (key && val) {
-                // key: "mask-type" -> camelKey: "maskType"
-                const camelKey = camelcase(key.trim());
-                // 把它提出来变成属性
-                node.attributes[camelKey] = val.trim();
+              const colonIndex = s.indexOf(':');
+              if (colonIndex === -1) return;
+
+              const key = s.substring(0, colonIndex).trim();
+              const val = s.substring(colonIndex + 1).trim();
+
+              // 只提取 mask-type，其他保留在 style 中
+              if (key === 'mask-type') {
+                const camelKey = camelcase(key);
+                node.attributes[camelKey] = val;
+              } else {
+                remainingStyles.push(`${key}:${val}`);
               }
             });
-            // 💀 核心步骤：彻底删除 style 属性，消除 TS 报错
-            delete node.attributes.style;
+
+            // 如果还有其他样式，保留 style 属性；否则删除
+            if (remainingStyles.length > 0) {
+              node.attributes.style = remainingStyles.join('; ');
+            } else {
+              delete node.attributes.style;
+            }
           }
 
           // 2. 处理原本就是属性但带横杠的 key (如 stroke-width -> strokeWidth)
