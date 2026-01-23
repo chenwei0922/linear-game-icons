@@ -95,6 +95,10 @@ const replaceCodePlaceholderAttrs = (code: string) => {
   str = dealCode(str, '_strokeColor', 'stroke || color', 'fill')
   str = dealCode(str, '_fillColor', 'fill || color', 'stroke')
 
+  // 处理 style 属性: style="{{ ... }}" => style={{ ... }}
+  // svgo 输出的 style 是字符串形式 "{{ key: 'value' }}"，需要转换为 JSX 表达式 {{ key: 'value' }}
+  str = str.replace(/style="(\{\{.*?\}\})"/g, 'style=$1')
+
   return str
 }
 
