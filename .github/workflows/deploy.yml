@@ -6,6 +6,13 @@ on:
   push:
     branches: ["main"]
 
+  # 当 Sync Icons 工作流成功完成时触发
+  workflow_run:
+    workflows: ["🎨 Sync Icons"]
+    types:
+      - completed
+    branches: ["main"]
+
   # 允许在 Actions 页面手动触发
   workflow_dispatch:
 
@@ -22,6 +29,8 @@ concurrency:
 
 jobs:
   build:
+    # 只在手动触发、push 触发、或 workflow_run 成功时运行
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
