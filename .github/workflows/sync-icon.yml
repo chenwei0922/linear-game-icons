@@ -2,8 +2,8 @@ name: 🎨 Sync Icons
 
 on:
   workflow_dispatch: # 允许手动点击按钮触发
-  schedule:
-    - cron: "0 1 * * 5" # 每周五凌晨 1 点自动运行 (UTC 时间，北京时间早上9点)
+  # schedule:
+  #   - cron: "0 1 * * 5" # 每周五凌晨 1 点自动运行 (UTC 时间，北京时间早上9点)
 
 jobs:
   sync:
