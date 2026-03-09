@@ -23,7 +23,7 @@
   "homepage": "https://github.com/LinearGameAI/linear-game-icons.git#README",
   "repository": {
     "type": "git",
-    "url": "https://github.com/LinearGameAI/linear-game-icons.git",
+    "url": "git+https://github.com/LinearGameAI/linear-game-icons.git",
     "directory": "packages/react"
   },
   "bugs": {
