@@ -1,6 +1,6 @@
 {
   "name": "@yoroll/react-icon",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -53,6 +53,5 @@
   },
   "sideEffects": false,
   "unpkg": "dist/index.iife.min.js",
-  "jsdelivr": "dist/index.iife.min.js",
-  "devDependencies": {}
+  "jsdelivr": "dist/index.iife.min.js"
 }
