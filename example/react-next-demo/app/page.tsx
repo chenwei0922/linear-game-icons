@@ -35,7 +35,7 @@ export default function Home() {
           return (
             <div onClick={() => onClick(name)} key={i} className="px-2 cursor-pointer flex flex-col items-center justify-center w-25 p-3 border-[1px] border-white/20">
               <div className='w-full h-10 flex items-center justify-center'>{C && <C size={size} color={color} />}</div>
-              <div className='w-full mt-3 h-10 flex  justify-center'><span className="text-white text-sm text-center break-all">{name}</span></div>
+              <div className='w-full mt-3 h-10 flex  justify-center'><span className="text-white text-sm text-center break-all" style={{ color: color }}>{name}</span></div>
             </div>
           )
         })}
