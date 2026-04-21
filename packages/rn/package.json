@@ -1,0 +1,69 @@
+{
+  "name": "@yoroll/rn-icon",
+  "version": "0.0.1",
+  "description": "Linear Game icon library for React Native",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "pnpm run build:generate && pnpm run build:build && pnpm run build:types",
+    "build:generate": "tsx build/generate.ts",
+    "build:build": "NODE_ENV=production tsx build/build.ts",
+    "build:types": "tsc --declaration --emitDeclarationOnly --outDir dist/types",
+    "release": "npm publish"
+  },
+  "keywords": [
+    "svg",
+    "icon",
+    "react-native",
+    "react-native-svg"
+  ],
+  "author": "LinearGameAI",
+  "license": "ISC",
+  "publishConfig": {
+    "access": "public"
+  },
+  "homepage": "https://github.com/LinearGameAI/linear-game-icons.git#README",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LinearGameAI/linear-game-icons.git",
+    "directory": "packages/rn"
+  },
+  "bugs": {
+    "url": "https://github.com/LinearGameAI/linear-game-icons/issues"
+  },
+  "files": [
+    "dist"
+  ],
+  "types": "dist/types/index.d.ts",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.js"
+    },
+    "./*": "./*"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./*",
+        "./dist/types/*"
+      ]
+    }
+  },
+  "sideEffects": false,
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-native": ">=0.70.0",
+    "react-native-svg": ">=13.0.0"
+  },
+  "peerDependenciesMeta": {
+    "react-native": {
+      "optional": false
+    },
+    "react-native-svg": {
+      "optional": false
+    }
+  }
+}

@@ -7,7 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:react": "pnpm run -C packages/react build",
     "publish:react": "pnpm run -C packages/react release",
+    "build:rn": "pnpm run -C packages/rn build",
+    "publish:rn": "pnpm run -C packages/rn release",
     "preview:react": "pnpm install && pnpm run -C example/react-next-demo dev",
+    "preview:rn": "pnpm install && pnpm run -C example/rn-expo-demo web",
     "sync-icon": "tsx sh/sync-icon.ts"
   },
   "keywords": [],

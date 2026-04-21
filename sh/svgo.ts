@@ -2,8 +2,8 @@ import camelcase from 'camelcase'
 import { Config, optimize, PluginInfo, XastChild, XastElement, XastRoot } from 'svgo'
 import tinycolor from 'tinycolor2'
 
-const getSvgoConfig = (lang: 'react' | 'vue' = 'react') => {
-  const _placeClass = lang === 'react' ? '_className' : '_class'
+const getSvgoConfig = (lang: 'react' | 'vue' | 'rn' = 'react') => {
+  const _placeClass = (lang === 'react' || lang === 'rn') ? '_className' : '_class'
 
   const svgoConfig: Config = {
     //浮点数精度取2位
@@ -167,7 +167,7 @@ const getSvgoConfig = (lang: 'react' | 'vue' = 'react') => {
       }
     ]
   }
-  if (lang === 'react') {
+  if (lang === 'react' || lang === 'rn') {
     svgoConfig.plugins?.push({
       name: 'fixStyleAndCamelCase',
       fn: (root: XastRoot) => {
@@ -294,7 +294,7 @@ const getSvgoConfig = (lang: 'react' | 'vue' = 'react') => {
   return svgoConfig;
 }
 
-export const optimizeSvg = ({ svg, lang = 'react' }: { svg: string; lang?: 'react' | 'vue' }) => {
+export const optimizeSvg = ({ svg, lang = 'react' }: { svg: string; lang?: 'react' | 'vue' | 'rn' }) => {
   const config = getSvgoConfig(lang)
   const res = optimize(svg, config)
   if (res.data) return res.data
